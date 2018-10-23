@@ -25,24 +25,32 @@ with open('paladin.csv', 'r') as csvfile:
 
         spell_names.append(spell_name)
 
-
-for i in range(len(spell_list)):
-    print(spell_names[i])
+# for i in range(len(spell_list)):
+#     print(spell_names[i])
 
 # Do the following for each image
 i = 0
+
+
 while i < len(images):
     for image in images:
-
         if int(image[19:21]) == i+1:
-            card_row = (20, 20, 1504, 720) # row of cards
-            single_card = (20, 20, 520, 720) # size of a single card (left, upper, right, lower)
+            single_card = [20, 20, 520, 720] # (left, upper, right, lower)
+            new_cards = []
+            for count in range(9):
+                column = int(count/3)
+                row = count % 3
+                new_cards.append(((single_card[0] + row*500+row), (single_card[1] + column*700+ column), (single_card[2] + row*500 + row), (single_card[3] + column*700 + column)))
+
+            # print(new_cards)
             spell_page = ("./"+folder+"/"+image)
-            print(spell_page)
+            # print(spell_page)
 
             spell_page = Image.open(spell_page)
-            single_card = spell_page.crop(single_card)
 
-            # spell_page.show()
-            single_card.show()
+            card_images = []
+            for j in range(len((new_cards))):
+                card_images.append(spell_page.crop(new_cards[j]))
+                # card_images[i].show()
+                print(spell_names[9*i+j])
             i = i + 1
