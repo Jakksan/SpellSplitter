@@ -1,8 +1,23 @@
 import os
 from PIL import Image
 import pytesseract
+import platform
 
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files (x86)\Tesseract-OCR\tesseract'
+# pytesseract.pytesseract.tesseract_cmd = pytesseract_location
+
+operating_system = platform.system()
+
+if  operating_system == "Windows":
+    print("Your OS sucks amigo. G3t mor l33t. ")
+    pytesseract_location = r"C:\Program Files (x86)\Tesseract-OCR\tesseract"
+
+elif operating_system == "Darwin":
+    print("At least you aren't using Windows...")
+    print("If you run into errors related to Tesseract, make sure you've run 'brew install tesseract' and possibly 'pip3 install pytesseract.' ")
+
+elif operating_system == "Linux":
+    print("You are the superior human being. Please enjoy this program and use it to it's fullest potential. ")
+
 
 # Folder to look in
 folder = "Paladin_Spells"
@@ -14,7 +29,10 @@ images = os.listdir("./"+folder)
 if images[0] == ".DS_Store":
     images.remove(".DS_Store")
 
-os.makedirs("./" + folder + "_Finished")
+try:
+    os.makedirs("./" + folder + "_Finished")
+except:
+    print(folder + "_Finished already exists. Please delete the folder to continue")
 
 # Do the following for each image
 for image in images:
@@ -32,7 +50,7 @@ for image in images:
 
     #print(new_cards)
     spell_page = ("./"+folder+"/"+image)
-    print(spell_page)
+    # print(spell_page)
 
     spell_page = Image.open(spell_page)
 
@@ -43,7 +61,7 @@ for image in images:
         card_images.append(spell_page.crop(new_cards[i]))
         spell_page.crop(new_names[i]).save("temp.bmp")
         file_name = pytesseract.image_to_string("temp.bmp")
-        print(file_name)
+        # print(file_name)
         file_name = file_name + ".png"
         file_name = file_name.replace("/", "^")
 
